@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- css -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="font/fonts/iconfont.css">
+    <link rel="icon" href="img/boardIcon/icon01.webp">
+    <!-- js -->
+    <script src="js/menu.js"></script>
+    <script src="js/game.js"></script>
+    <!-- 自定义工具库 -->
+    <script src="js/Free.js"></script>
+    <title>欢乐五子棋</title>
+    <style type="text/css">
+        body {
+            /* 取消文本被选中 */
+            -moz-user-select: none;
+            /*火狐*/
+            -webkit-user-select: none;
+            /*webkit浏览器*/
+            -ms-user-select: none;
+            /*IE10*/
+            -khtml-user-select: none;
+            /*早期浏览器*/
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 游戏区域 -->
+    <div class="wrapper displays">
+        <!-- 构建画布 -->
+        <canvas class="chess" width="600" height="600">
+            <span>对不起你的浏览器不支持该游戏，请更换浏览器运行。</span>
+        </canvas>
+        <!-- 游戏功能键 -->
+        <div class="chessMenu">
+            <button class="retractBtn">悔棋</button>
+            <button class="unretractBtn">撤销悔棋</button>
+            <button class="restartBtn">重新开始</button>
+            <button class="menuBtn">返回主菜单</button>
+        </div>
+        <!-- 构建游戏数据展示 -->
+        <div class="gameData">
+            <ul>
+                <!-- 玩家数据面板 -->
+                <li class="player">
+                    <!-- 头像 -->
+                    <img src="img/player/皮卡丘.jpg" alt="">
+                    <div class="playData">
+                        <p>玩家</p>
+                        <p class="playerStep">
+                            已走步数：<span>0步</span>
+                        </p>
+                        <p class="playerScore">
+                            得分情况：<span>0分</span>
+                        </p>
+                        <p class="playerWin">
+                            获胜次数：<span>0次</span>
+                        </p>
+                    </div>
+                </li>
+                <!-- 人机数据面板 -->
+                <li class="machine">
+                    <!-- 头像 -->
+                    <img src="img/boardIcon/icon01.webp" alt="">
+                    <div class="machineData">
+                        <p>人机</p>
+                        <p class="computerStep">
+                            已走步数：<span>0步</span>
+                        </p>
+                        <p class="computerScore">
+                            得分情况：<span>0分</span>
+                        </p>
+                        <p class="computerWin">
+                            获胜次数：<span>0次</span>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 游戏菜单 -->
+    <div class="menuWrap">
+        <div class="title">
+            <p>中华五子棋</p>
+        </div>
+        <ul class="menu">
+            <li class="playGame">开始游戏</li>
+            <li class="setGame">游戏设置</li>
+            <li class="gameGuide">游戏说明</li>
+        </ul>
+    </div>
+    <!-- 弹窗 -->
+    <div class="popWrapper displays">
+        <!-- 游戏设置弹窗 -->
+        <div class="setPop displays">
+            <h1>声音设置</h1>
+            <i class="iconfont">&#xe605;</i>
+            <button class="openBtn">开启音乐</button>
+            <button class="closeBtn">关闭音乐</button>
+            <button class="setBtn">X</button>
+        </div>
+        <!-- 游戏说明弹窗 -->
+        <div class="guidePop displays">
+            <p>&copy;作者：☆往事随風☆</p>
+            <p>
+                <a href="https://github.com/china-521/webChess">github源码链接</a>
+            </p>
+            <p>
+                <a href="https://mp.csdn.net/mp_blog/manage/article?spm=1010.2135.3001.5448">CSDN博客链接</a>
+            </p>
+            <button class="guideBtn">X</button>
+        </div>
+    </div>
+</body>
+
+</html>

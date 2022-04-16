@@ -1,0 +1,306 @@
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    background: url(../img/background/宇宙.jfif) no-repeat;
+}
+
+// 界面是否显示
+.displays {
+    // 隐藏
+    display: none;
+}
+
+// 定义弹窗样式混合
+.maxCss() {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    color: #000;
+    text-align: center;
+    font: 16px "宋体""微软雅黑""楷体";
+    background-color: #fff;
+    box-shadow: 1px 1px 10px rgba(198, 198, 198, .5);
+}
+
+// 设置游戏外部容器
+.wrapper {
+    width: 1000px;
+    height: 600px;
+    margin: 5% auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+
+    .chess {
+        cursor: pointer;
+        float: left;
+        background-color: #d2ae8c;
+    }
+
+    // 设置游戏内菜单
+    .chessMenu {
+        width: 200px;
+        float: left;
+        margin-top: 20%;
+        flex-flow: column wrap;
+
+        // background-color:skyblue;
+        button {
+            width: 200px;
+            height: 50px;
+            cursor: pointer;
+            color: #fff;
+            border: none;
+            background: url(../img/btnIcon/menuBtn.png) no-repeat 0;
+            background-size: 200px 100px;
+        }
+    }
+
+    //设置游戏数据区域 
+    .gameData {
+        width: 200px;
+        height: 560px;
+        float: left;
+
+        // 设置头像
+        img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        ul {
+            width: 100%;
+            height: 100%;
+        }
+
+        li {
+            width: 100%;
+            height: 50%;
+            color: #fff;
+            padding-top: 20px;
+            display: flex;
+        }
+
+        // 玩家数据面板
+        .player {
+            background: url(../img/menuIcon/menu03.jfif) no-repeat -52px -50px;
+        }
+
+        .playData,
+        .machineData {
+            margin-left: 10px;
+            line-height: 26px;
+        }
+
+        // 人机数据面板
+        .machine {
+            background: url(../img/menuIcon/menu03.jfif) no-repeat -52px -50px;
+        }
+    }
+}
+
+// 设置游戏菜单
+.menuWrap {
+    width: 200px;
+    height: 350px;
+    position: absolute;
+    transform: translateX(-50%) translateY(-50%);
+    left: 50%;
+    top: 50%;
+    background: url(../img/menuIcon/menuBack.webp) no-repeat -11px -2px;
+    background-size: 220px 350px;
+    box-shadow: 1px 1px 100px rgba(0, 0, 0, .3);
+
+    .title {
+        width: 100%;
+        height: 45px;
+        text-align: center;
+
+        p {
+            margin-top: 10px;
+            font: 20px "楷体";
+            color: #fff;
+        }
+    }
+
+    .menu {
+        width: 100%;
+        height: 305px;
+        cursor: pointer;
+        display: flex;
+        flex-flow: column wrap;
+        text-align: center;
+
+        li {
+            height: 50px;
+            line-height: 50px;
+            color: #fff;
+            margin-top: 20px;
+            background: url(../img/btnIcon/menuBtn.png) no-repeat 0 -25px;
+            background-size: 200px 100px;
+        }
+
+    }
+}
+
+// 游戏菜单弹窗
+.popWrapper {
+    position: relative;
+    background-color: #b8b8b799;
+
+    // 游戏设置弹窗
+    .setPop {
+        .maxCss();
+
+        // 标题
+        h1 {
+            position: absolute;
+            top: 19px;
+            left: 65px;
+            font: bold 16px "楷体";
+        }
+
+        // 声音按钮
+        i {
+            width: 40px;
+            height: 40px;
+            font-size:20px;
+            position: absolute;
+            top: 80px;
+            left: 42%;
+            cursor: pointer;
+        }
+
+        // 百分比
+        .show {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            position: absolute;
+            right: 10px;
+            top: 35px;
+        }
+
+        .setBtn,
+        .openBtn,
+        .closeBtn {
+            cursor: pointer;
+            background-image: linear-gradient(to right, pink, skyblue);
+            position: absolute;
+            line-height: 2px;
+        }
+
+        // 关闭弹窗
+        .setBtn {
+            width: 30px;
+            height: 30px;
+            right: 0;
+            background-image: none;
+            border: none;
+            background-color: #fff;
+
+            &:hover {
+                background-color: red;
+                color: #fff;
+            }
+        }
+
+        // 打开音乐
+        .openBtn {
+            width: 70px;
+            height: 30px;
+            bottom: 60px;
+            left: 20px;
+        }
+
+        // 关闭音乐
+        .closeBtn {
+            width: 70px;
+            height: 30px;
+            bottom: 60px;
+            left: 110px;
+        }
+
+        // 进度条容器
+        .sound_wrapper {
+            width: 180px;
+            height: 25px;
+            cursor: pointer;
+            position: absolute;
+            top: 75px;
+            left: 20px;
+
+            // background-color: blue;
+            // 进度条
+            .progress {
+                width: 160px;
+                height: 6px;
+                position: relative;
+                top: 10px;
+                background-color: #adada6;
+
+                // 进度条方块
+                .sound_inner {
+                    width: 10px;
+                    height: 10px;
+                    position: absolute;
+                    top: -2px;
+                    border-radius: 2px;
+                    background-color: rgb(245, 3, 3);
+                }
+            }
+
+            // 进度条底色
+            .deep {
+                height: 6px;
+                position: absolute;
+                background-color: #0289f7;
+            }
+
+        }
+    }
+
+    // 游戏说明弹窗
+    .guidePop {
+        .maxCss();
+
+        // 弹窗关闭按钮
+        .guideBtn {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            background-color: #fff;
+            border: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            line-height: 2px;
+
+            &:hover {
+                background-color: red;
+                color: #fff;
+            }
+        }
+
+        // 设置文本格式
+        p {
+            margin: 40px 0 0 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: skyblue;
+            text-decoration: underline;
+        }
+    }
+
+}

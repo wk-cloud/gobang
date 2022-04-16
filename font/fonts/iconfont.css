@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2732484 */
+  src: url('iconfont.woff2?t=1628740834460') format('woff2'),
+       url('iconfont.woff?t=1628740834460') format('woff'),
+       url('iconfont.ttf?t=1628740834460') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-quanping:before {
+  content: "\e73d";
+}
+
+.icon-xiaoping:before {
+  content: "\e67d";
+}
+
+.icon-quanping1:before {
+  content: "\e755";
+}
+
+.icon-quanping2:before {
+  content: "\e7ab";
+}
+
+.icon-shipinbofangqixilietubiao-:before {
+  content: "\e601";
+}
+
+.icon-shipinbofangqixilietubiao-1:before {
+  content: "\e602";
+}
+
+.icon-shipinbofangqixilietubiao-2:before {
+  content: "\e603";
+}
+
+.icon-shipinbofangqixilietubiao-3:before {
+  content: "\e604";
+}
+
+.icon-shipinbofangqixilietubiao-4:before {
+  content: "\e605";
+}
+
+.icon-shipinbofangqixilietubiao-5:before {
+  content: "\e606";
+}
+
+.icon-shipinbofangqixilietubiao-6:before {
+  content: "\e607";
+}
+
+.icon-shipinbofangqixilietubiao-7:before {
+  content: "\e608";
+}
+
+.icon-shipinbofangqixilietubiao-8:before {
+  content: "\e609";
+}
+
+.icon-shipinbofangqixilietubiao-9:before {
+  content: "\e60a";
+}
+
+.icon-shipinbofangqixilietubiao-10:before {
+  content: "\e60b";
+}
+
