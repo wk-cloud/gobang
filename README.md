@@ -51,5 +51,5 @@
 
 [效果展示](https://www.bilibili.com/video/BV1hM4y1G7ZB/)
 
-[在线试玩](http://wk-china.gitee.io/gobang/gobang)
+[在线试玩](https://china-521.github.io/gobang)
 
