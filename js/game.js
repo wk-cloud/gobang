@@ -23,11 +23,11 @@ window.addEventListener("load", function () {
     var computerWin = document.querySelector(".computerWin > span");
 
     // 获取棋子落下声音
-    var downMp3 = new Audio("video/chessDown.mp3");
+    var downMp3 = new Audio("audio/chessDown.mp3");
     // 获取游戏胜利音效
-    var winMp3 = new Audio("video/win.mp3");
+    var winMp3 = new Audio("audio/win.mp3");
     // 获取游戏失败音效
-    var failMp3 = new Audio("video/fail.mp3");
+    var failMp3 = new Audio("audio/fail.mp3");
 
 
     //棋盘宽高

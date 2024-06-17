@@ -1,11 +1,11 @@
 // 音乐切换标识(全局可访问变量)
 var music = false;
 // 获取按钮点击音效
-var clickSound = new Audio('video/click.mp3');
+var clickSound = new Audio('audio/click.mp3');
 // 获取菜单背景声音
-var menuSound = new Audio('video/卡农.mp3');
+var menuSound = new Audio('audio/卡农.mp3');
 // 获取游戏背景声音
-var gameSound = new Audio('video/雪人兄弟.mp3');
+var gameSound = new Audio('audio/雪人兄弟.mp3');
 // 设置音乐
 menuSound.loop = true;
 gameSound.loop = true;
