@@ -8,11 +8,13 @@
     <!-- css -->
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/game-media.css">
     <link rel="stylesheet" href="font/fonts/iconfont.css">
     <link rel="icon" href="img/boardIcon/icon01.webp">
     <!-- js -->
     <script src="js/menu.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/size.js"></script>
     <!-- 自定义工具库 -->
     <script src="js/Free.js"></script>
     <title>欢乐五子棋</title>
@@ -34,20 +36,20 @@
 
 <body>
     <!-- 游戏区域 -->
-    <div class="wrapper displays">
+    <div class="game-container hidden">
         <!-- 构建画布 -->
         <canvas class="chess" width="600" height="600">
             <span>对不起你的浏览器不支持该游戏，请更换浏览器运行。</span>
         </canvas>
         <!-- 游戏功能键 -->
-        <div class="chessMenu">
+        <div class="chess-menu">
             <button class="retractBtn">悔棋</button>
             <button class="unretractBtn">撤销悔棋</button>
             <button class="restartBtn">重新开始</button>
             <button class="menuBtn">返回主菜单</button>
         </div>
         <!-- 构建游戏数据展示 -->
-        <div class="gameData">
+        <div class="game-data">
             <ul>
                 <!-- 玩家数据面板 -->
                 <li class="player">
@@ -98,7 +100,7 @@
         </ul>
     </div>
     <!-- 弹窗 -->
-    <div class="popWrapper displays">
+    <div class="popWrapper hidden">
         <!-- 游戏设置弹窗 -->
         <div class="setPop displays">
             <h1>声音设置</h1>

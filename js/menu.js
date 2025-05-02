@@ -14,7 +14,7 @@ window.onload = function () {
     // 获取游戏菜单
     var menu = this.document.querySelector(".menuWrap");
     // 获取游戏区域
-    var gameWrap = this.document.querySelector(".wrapper");
+    var gameWrap = this.document.querySelector(".game-container");
     // 获取开始游戏按钮
     var play = this.document.querySelector(".playGame");
     // 获取游戏设置按钮
@@ -61,8 +61,8 @@ window.onload = function () {
     play.addEventListener("click", function () {
         // 触发音效
         clickSound.play();
-        window.free.toggleClass(menu, "displays");
-        window.free.toggleClass(gameWrap, "displays");
+        window.free.toggleClass(menu, "hidden");
+        window.free.toggleClass(gameWrap, "hidden");
         // 关闭菜单背景音乐
         menuSound.pause();
         if (music) {
@@ -76,8 +76,8 @@ window.onload = function () {
     set.addEventListener("click", function () {
         // 触发音效
         clickSound.play();
-        window.free.toggleClass(popWrap, "displays");
-        window.free.toggleClass(setPop, "displays");
+        window.free.toggleClass(popWrap, "hidden");
+        window.free.toggleClass(setPop, "hidden");
     });
 
     // 关闭所有背景音乐
@@ -97,20 +97,20 @@ window.onload = function () {
 
     // 设置声音弹窗关闭按钮
     setClose.addEventListener("click", function () {
-        window.free.toggleClass(popWrap, "displays");
-        window.free.toggleClass(setPop, "displays");
+        window.free.toggleClass(popWrap, "hidden");
+        window.free.toggleClass(setPop, "hidden");
     });
 
     // 设置游戏说明弹窗
     guide.addEventListener("click", function () {
         // 触发音效
         clickSound.play();
-        window.free.toggleClass(popWrap, "displays");
-        window.free.toggleClass(guidePop, "displays");
+        window.free.toggleClass(popWrap, "hidden");
+        window.free.toggleClass(guidePop, "hidden");
     });
     // 设置游戏说明关闭按钮
     guideClose.addEventListener("click", function () {
-        window.free.toggleClass(popWrap, "displays");
-        window.free.toggleClass(guidePop, "displays");
+        window.free.toggleClass(popWrap, "hidden");
+        window.free.toggleClass(guidePop, "hidden");
     });
 };

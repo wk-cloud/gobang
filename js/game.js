@@ -10,7 +10,7 @@ window.addEventListener("load", function () {
     // 获取返回主菜单按钮
     var mainMenu = document.querySelector(".menuBtn");
     // 获取游戏区域
-    var gameWrap = document.querySelector(".wrapper");
+    var gameWrap = document.querySelector(".game-container");
     // 获取游戏菜单
     var menu = document.querySelector(".menuWrap");
     // 获取玩家游戏信息
@@ -38,7 +38,7 @@ window.addEventListener("load", function () {
     var goalX = -1,
         goalY = -1;
     //游戏是否结束(默认游戏没有结束)
-    var gameOver = false;
+    var isGameOver = false;
     // 是否悔棋(初始无法悔棋)
     var isRetract = false;
     // 是否撤销悔棋(初始无法撤销悔棋)
@@ -46,12 +46,15 @@ window.addEventListener("load", function () {
     // 是否重新开始
     var isRestart = false;
     // 是否是玩家下棋（默认玩家先下）
-    var isMan = true;
-    // 保存棋盘位置的分数
-    var score = [];
+    var isPlayer = true;
+    // 电脑玩家下棋评分组(用于计算电脑玩家的下棋位置)
+    var scoreGroup = [];
+
+    // 初始化评分组
     for (var i = 0; i < chessWidth; i++) {
-        score[i] = [];
+        scoreGroup[i] = [];
     }
+
     //已经落子的集合
     var chessPlace = [];
     for (var i = 0; i < chessWidth; i++) {
@@ -61,7 +64,6 @@ window.addEventListener("load", function () {
     for (var i = 0; i < chessWidth; i++) {
         for (var j = 0; j < chessWidth; j++) {
             chessPlace[i][j] = 0;
-            console.log(chessPlace[i][j]);
         }
     }
 
@@ -90,12 +92,13 @@ window.addEventListener("load", function () {
     }
     // 绘制棋子
     function drawChess(eventX, eventY, flag) {
+        // flag: ture: 真人玩家, false：电脑玩家
         ctx.fillStyle = flag ? "#000" : "#fff";
         ctx.beginPath();
         ctx.arc(20 + eventX * 40, 20 + eventY * 40, 10, 0, 360 * Math.PI / 180, true);
         ctx.fill();
         // 将棋子聚焦到线条的交点上（方式二，性能较低）
-        // var wrap = document.querySelector(".wrapper");
+        // var wrap = document.querySelector(".game-container");
         // eventX = event.clientX - wrap.offsetLeft;
         // eventY = event.clientY - wrap.offsetTop;
         // for (var i = 0; i < chessWidth; i++) {
@@ -112,7 +115,7 @@ window.addEventListener("load", function () {
         // ctx.fill();
     }
     // 清空棋盘
-    function clear() {
+    function clearBoard() {
         // 清空棋盘
         ctx.clearRect(0, 0, chess.width, chess.height);
         // 重新绘制棋盘
@@ -153,14 +156,14 @@ window.addEventListener("load", function () {
         var y = eventY;
         // 横向获胜
         for (var i = x - 1; i >= 0; i--) {
-            if (chessPlace[i][y] == num) {
+            if (chessPlace[i][y] === num) {
                 sum++;
             } else {
                 break;
             }
         }
         for (var i = x + 1; i < chessWidth; i++) {
-            if (chessPlace[i][y] == num) {
+            if (chessPlace[i][y] === num) {
                 sum++;
             } else {
                 break;
@@ -172,14 +175,14 @@ window.addEventListener("load", function () {
         sum = 0;
         // 纵向获胜
         for (var i = y - 1; i >= 0; i--) {
-            if (chessPlace[x][i] == num) {
+            if (chessPlace[x][i] === num) {
                 sum++;
             } else {
                 break;
             }
         }
         for (var i = y + 1; i < chessWidth; i++) {
-            if (chessPlace[x][i] == num) {
+            if (chessPlace[x][i] === num) {
                 sum++;
             } else {
                 break;
@@ -191,14 +194,14 @@ window.addEventListener("load", function () {
         sum = 0;
         // 正斜线获胜
         for (var i = x - 1, j = y - 1; i >= 0 && j >= 0; i--, j--) {
-            if (chessPlace[i][j] == num) {
+            if (chessPlace[i][j] === num) {
                 sum++;
             } else {
                 break;
             }
         }
         for (var i = x + 1, j = y + 1; i < chessWidth && j < chessWidth; i++, j++) {
-            if (chessPlace[i][j] == num) {
+            if (chessPlace[i][j] === num) {
                 sum++;
             } else {
                 break;
@@ -210,14 +213,14 @@ window.addEventListener("load", function () {
         sum = 0;
         // 反斜线获胜
         for (var i = x - 1, j = y + 1; i >= 0 && j < chessWidth; i--, j++) {
-            if (chessPlace[i][j] == num) {
+            if (chessPlace[i][j] === num) {
                 sum++;
             } else {
                 break;
             }
         }
         for (var i = x + 1, j = y - 1; i < chessWidth && j >= 0; i++, j--) {
-            if (chessPlace[i][j] == num) {
+            if (chessPlace[i][j] === num) {
                 sum++;
             } else {
                 break;
@@ -240,7 +243,7 @@ window.addEventListener("load", function () {
                 }
             }
         }
-        if (count == 225) {
+        if (count === 225) {
             return true;
         }
     }
@@ -248,26 +251,26 @@ window.addEventListener("load", function () {
     retract.addEventListener("click", function () {
         // 触发按钮点击音效
         clickSound.play();
-        if (gameOver) {
+        if (isGameOver) {
             alert("游戏已经结束，无法悔棋！");
-        } else if (isRetract == false) {
+        } else if (!isRetract) {
             alert("无法悔棋！");
         } else {
             isRetract = false; //表示已经悔过棋子了,不能再悔棋
             isUnretract = true; //悔过棋子后才可以撤销悔棋
             clearChess(eventX, eventY); //清除目标位置玩家棋子
             clearChess(goalX, goalY); //清除目标位置电脑棋子
-            playerData("", "retract"); //重置玩家游戏数据
-            computerData("", "retract"); //重置电脑游戏数据
+            handlePlayerData(false, "retract"); //重置玩家游戏数据
+            handleComputerData(false, "retract"); //重置电脑游戏数据
         }
     });
     // 撤销悔棋
     unretract.addEventListener("click", function () {
         // 触发按钮点击音效
         clickSound.play();
-        if (gameOver) {
+        if (isGameOver) {
             alert("游戏已经结束，无法撤销悔棋！");
-        } else if (isUnretract == false) {
+        } else if (!isUnretract) {
             alert("无法撤销！");
         } else {
             isUnretract = false; //撤销后不能再次撤销
@@ -276,8 +279,8 @@ window.addEventListener("load", function () {
             drawChess(goalX, goalY, false); //绘制目标位置电脑棋子
             chessPlace[eventX][eventY] = 1;
             chessPlace[goalX][goalY] = 2;
-            playerData(); //重置玩家游戏数据
-            computerData(); //重置电脑游戏数据
+            handlePlayerData(); //重置玩家游戏数据
+            handleComputerData(); //重置电脑游戏数据
         }
     });
     // 重新开始
@@ -288,14 +291,14 @@ window.addEventListener("load", function () {
             isRestart = false;
             var choice = confirm("重新开始将会清空当前游戏进度，确定要重新开始吗？");
             if (choice) {
-                clear(); //清空棋盘
-                gameOver = false;
-                isMan = true; //玩家下棋
+                clearBoard(); //清空棋盘
+                isGameOver = false;
+                isPlayer = true; //玩家下棋
                 isRetract = false; //无法悔棋
                 isUnretract = false; //无法撤销悔棋
                 // 清空游戏数据
-                playerData("", "clearAll");
-                computerData("", "clearAll");
+                handlePlayerData(false, "restart");
+                handleComputerData(false, "restart");
             }
         } else {
             confirm("尚未开始对局！");
@@ -305,19 +308,19 @@ window.addEventListener("load", function () {
     mainMenu.addEventListener("click", function () {
         // 触发按钮点击音效
         clickSound.play();
-        gameOver = false;
-        isMan = true; //玩家下棋
+        isGameOver = false;
+        isPlayer = true; //玩家下棋
         isRetract = false; //无法悔棋
         isUnretract = false; //无法撤销悔棋
         var choice = confirm("返回主菜单将清空所有游戏数据，是否继续？");
         if (choice) {
-            window.free.toggleClass(menu, "displays");
-            window.free.toggleClass(gameWrap, "displays");
+            window.free.toggleClass(menu, "hidden");
+            window.free.toggleClass(gameWrap, "hidden");
             // 清空游戏数据
-            playerData("", "clearAll");
-            computerData("", "clearAll");
+            handlePlayerData(false, "restart");
+            handleComputerData(false, "restart");
             // 清空棋盘
-            clear();
+            clearBoard();
             // 关闭游戏背景音乐
             gameSound.pause();
             if (music) {
@@ -328,55 +331,60 @@ window.addEventListener("load", function () {
         }
     });
 
-    // 玩家游戏数据处理
-    var playerCount = 0;
+    // 玩家已走步数
+    var playerStepCount = 0;
+    // 玩家获胜数量
     var playerWinCount = 0;
 
-    function playerData(win, flag) {
-        // 重置所有数据
-        if (flag == "clearAll") {
-            playerCount = -1;
+    // 处理真人玩家数据
+    function handlePlayerData(win, flag) {
+        // 重置所有数据（重新开始或返回主菜单）
+        if (flag === "restart") {
+            playerStepCount = -1;
             playerWinCount = 0;
             playerWin.innerHTML = playerWinCount + "次";
         }
-        // 重置步数和分数
-        if (flag == "clearPath") {
-            playerCount = -1;
+        // 重置步数和分数（再来一局）
+        if (flag === "again") {
+            playerStepCount = -1;
         }
-        // 如果悔棋，步数和分数减少
-        if (flag == "retract") {
-            playerCount -= 2;
+        // 如果悔棋，步数和分数减少 (悔棋)
+        if (flag === "retract") {
+            playerStepCount -= 2;
         }
-        playerCount++;
-        playerStep.innerHTML = (playerCount) + "步";
-        playerScore.innerHTML = (playerCount * 10) + "分";
+        playerStepCount++;
+        playerStep.innerHTML = (playerStepCount) + "步";
+        playerScore.innerHTML = (playerStepCount * 10) + "分";
         if (win) {
             playerWinCount++;
             playerWin.innerHTML = playerWinCount + "次";
         }
     }
-    // 电脑游戏数据处理
-    var computerCount = 0;
+
+    // 电脑玩家已走步数
+    var computerStepCount = 0;
+    // 电脑玩家获胜数量
     var computerWinCount = 0;
 
-    function computerData(win, flag) {
-        // 重置所有数据
-        if (flag == "clearAll") {
-            computerCount = -1;
+    // 处理电脑玩家数据
+    function handleComputerData(win, flag) {
+        // 重置所有数据（重新开始或返回主菜单）
+        if (flag === "restart") {
+            computerStepCount = -1;
             computerWinCount = 0;
             computerWin.innerHTML = computerWinCount + "次";
         }
-        // 重置步数和分数
-        if (flag == "clearPath") {
-            computerCount = -1;
+        // 重置步数和分数（再来一局）
+        if (flag === "again") {
+            computerStepCount = -1;
         }
-        // 如果悔棋，步数和分数减少
-        if (flag == "retract") {
-            computerCount -= 2;
+        // 如果悔棋，步数和分数减少 (悔棋)
+        if (flag === "retract") {
+            computerStepCount -= 2;
         }
-        computerCount++;
-        computerStep.innerHTML = (computerCount) + "步";
-        computerScore.innerHTML = (computerCount * 10) + "分";
+        computerStepCount++;
+        computerStep.innerHTML = (computerStepCount) + "步";
+        computerScore.innerHTML = (computerStepCount * 10) + "分";
         // 如果获胜
         if (win) {
             computerWinCount++;
@@ -388,25 +396,24 @@ window.addEventListener("load", function () {
     chess.addEventListener("click", function (event) {
         event = event || window.event;
         // 如果没有轮到玩家落子
-        if (isMan == false) {
+        if (!isPlayer) {
             alert("不要急，还没有轮到你哦。");
-            return
+            return;
         }
         // 如果游戏已经结束
-        if (gameOver == true) {
+        if (isGameOver) {
             alert("游戏已经结束，请点击重新开始。");
-            return
+            return;
         }
         // 使棋子落在棋盘线条焦点上
         eventX = Math.floor(event.offsetX / 40);
         eventY = Math.floor(event.offsetY / 40);
-        console.log(eventX);
         // 如果当前位置没有落子才能落子
-        if (chessPlace[eventX][eventY] == 0) {
+        if (chessPlace[eventX][eventY] === 0) {
             // 落子
             drawChess(eventX, eventY, true);
             // 记录数据
-            playerData();
+            handlePlayerData();
             // 落子音效
             downMp3.play();
             // 可以悔棋
@@ -420,48 +427,48 @@ window.addEventListener("load", function () {
             // 判断输赢
             if (win(eventX, eventY, num = 1)) {
                 // 游戏结束
-                gameOver = true;
+                isGameOver = true;
                 // 记录数据
-                playerData(true);
+                handlePlayerData(true);
                 // 播放获胜音乐
                 winMp3.play();
                 // 电脑不能再落子
-                isMan = true;
+                isPlayer = true;
                 // 提示是否再来一盘
                 var choice = confirm("你赢了，再来一局？");
                 if (choice) {
                     // 清空棋盘
-                    clear();
+                    clearBoard();
                     // 清空落子步数和分数
-                    playerData("", "clearPath");
-                    computerData("", "clearPath");
-                    gameOver = false;
+                    handlePlayerData(false, "again");
+                    handleComputerData(false, "again");
+                    isGameOver = false;
                 }
             }
             // 判断是否平局
             else if (tie()) {
                 // 游戏结束
-                gameOver = true;
+                isGameOver = true;
                 // 下一局轮到玩家下棋
-                isMan = true;
+                isPlayer = true;
                 // 是否再来一局
                 var choice = confirm("占成平局，再来一局？");
                 if (choice) {
                     // 清空棋盘
-                    clear();
+                    clearBoard();
                     // 清空落子步数和分数
-                    playerData("", "clearPath");
-                    computerData("", "clearPath");
-                    gameOver = false;
+                    handlePlayerData(false, "again");
+                    handleComputerData(false, "again");
+                    isGameOver = false;
                 }
             } else {
                 // 轮到电脑落子
-                isMan = false;
+                isPlayer = false;
             }
         } else {
             alert("当前位置已被占据，请选择其他位置落子");
         }
-        if (gameOver == false && isMan == false) {
+        if (!isGameOver && !isPlayer) {
             // 电脑下棋
             computerDown();
         }
@@ -479,42 +486,42 @@ window.addEventListener("load", function () {
             return 0;
         }
         // 2.全部为空没有棋子，判分为7
-        if (playerNum == 0 && computerNum == 0) {
+        if (playerNum === 0 && computerNum === 0) {
             return 7;
         }
         // 3.机器落一子，判分为35
-        if (computerNum == 1) {
+        if (computerNum === 1) {
             return 35;
         }
         // 4.机器落两子，判分为800
-        if (computerNum == 2) {
+        if (computerNum === 2) {
             return 800;
         }
         // 5.机器落三子，判分为15000
-        if (computerNum == 3) {
+        if (computerNum === 3) {
             return 15000;
         }
         // 6.机器落四子，判分为800000
-        if (computerNum == 4) {
+        if (computerNum === 4) {
             return 800000;
         }
 
         // 机器防守
 
         // 7.玩家落一子，判分为15
-        if (playerNum == 1) {
+        if (playerNum === 1) {
             return 15;
         }
         // 8.玩家落两子，判分为400
-        if (playerNum == 2) {
+        if (playerNum === 2) {
             return 400;
         }
         // 9.玩家落三子，判分为1800
-        if (playerNum == 3) {
+        if (playerNum === 3) {
             return 1800;
         }
         // 10.玩家落四子，判分为100000
-        if (playerNum == 4) {
+        if (playerNum === 4) {
             return 100000;
         }
 
@@ -522,10 +529,10 @@ window.addEventListener("load", function () {
     }
     // 电脑下棋
     function computerDown() {
-        // 初始化score评分组
+        // 初始化scoreGroup评分组
         for (var i = 0; i < chessWidth; i++) {
             for (var j = 0; j < chessWidth; j++) {
-                score[i][j] = 0;
+                scoreGroup[i][j] = 0;
             }
         }
         // 五元组中黑棋(玩家)数量
@@ -542,9 +549,9 @@ window.addEventListener("load", function () {
             for (var j = 0; j < chessWidth - 4; j++) {
                 for (var k = j; k < j + 5; k++) {
                     // 如果是玩家落得子
-                    if (chessPlace[k][i] == 1) {
+                    if (chessPlace[k][i] === 1) {
                         playerNum++;
-                    } else if (chessPlace[k][i] == 2) { //如果是电脑落子
+                    } else if (chessPlace[k][i] === 2) { //如果是电脑落子
                         computerNum++;
                     }
                 }
@@ -552,7 +559,7 @@ window.addEventListener("load", function () {
                 tempScore = chessScore(playerNum, computerNum);
                 // 为该五元组的每个位置添加分数
                 for (var k = j; k < j + 5; k++) {
-                    score[k][i] += tempScore;
+                    scoreGroup[k][i] += tempScore;
                 }
                 // 清空五元组中棋子数量和五元组临时得分
                 playerNum = 0;
@@ -566,9 +573,9 @@ window.addEventListener("load", function () {
             for (var j = 0; j < chessWidth - 4; j++) {
                 for (var k = 0; k < j + 5; k++) {
                     // 如果是玩家落得子
-                    if (chessPlace[i][k] == 1) {
+                    if (chessPlace[i][k] === 1) {
                         playerNum++;
-                    } else if (chessPlace[i][k] == 2) { //如果是电脑落子
+                    } else if (chessPlace[i][k] === 2) { //如果是电脑落子
                         computerNum++;
                     }
                 }
@@ -576,7 +583,7 @@ window.addEventListener("load", function () {
                 tempScore = chessScore(playerNum, computerNum);
                 // 为该五元组的每个位置添加分数
                 for (var k = j; k < j + 5; k++) {
-                    score[i][k] += tempScore;
+                    scoreGroup[i][k] += tempScore;
                 }
                 // 清空五元组中棋子数量和瞬时分数值
                 playerNum = 0;
@@ -595,19 +602,19 @@ window.addEventListener("load", function () {
                 var n = j; //y 0  1
                 for (; m > k - 5 && k - 5 >= -1; m--, n++) {
                     // 如果是玩家落得子
-                    if (chessPlace[m][n] == 1) {
+                    if (chessPlace[m][n] === 1) {
                         playerNum++;
-                    } else if (chessPlace[m][n] == 2) { //如果是电脑落子
+                    } else if (chessPlace[m][n] === 2) { //如果是电脑落子
                         computerNum++;
                     }
                 }
                 // 注意在斜向判断时，可能出现构不成五元组（靠近棋盘的四个顶角）的情况，所以要忽略这种情况
-                if (m == k - 5) {
+                if (m === k - 5) {
                     // 将每一个五元组中的黑棋和白棋个数传入评分表中
                     tempScore = chessScore(playerNum, computerNum);
                     // 为该五元组的每个位置添加分数
                     for (m = k, n = j; m > k - 5; m--, n++) {
-                        score[m][n] += tempScore;
+                        scoreGroup[m][n] += tempScore;
                     }
                 }
                 // 清空五元组中棋子数量和五元组临时得分
@@ -623,19 +630,19 @@ window.addEventListener("load", function () {
                 var n = j; //x 14
                 for (; m < k + 5 && k + 5 <= 15; m++, n--) {
                     // 如果是玩家落得子
-                    if (chessPlace[n][m] == 1) {
+                    if (chessPlace[n][m] === 1) {
                         playerNum++;
-                    } else if (chessPlace[n][m] == 2) { //如果是电脑落子
+                    } else if (chessPlace[n][m] === 2) { //如果是电脑落子
                         computerNum++;
                     }
                 }
                 // 注意在斜向判断时，可能出现构不成五元组（靠近棋盘的四个顶角）的情况，所以要忽略这种情况
-                if (m == k + 5) {
+                if (m === k + 5) {
                     // 将每一个五元组中的黑棋和白棋个数传入评分表 中
                     tempScore = chessScore(playerNum, computerNum);
                     // 为该五元组的每个位置添加分数
                     for (m = k, n = j; m < k + 5; m++, n--) {
-                        score[n][m] += tempScore;
+                        scoreGroup[n][m] += tempScore;
                     }
                 }
                 // 清空五元组中棋子数量和五元组临时得分
@@ -654,19 +661,19 @@ window.addEventListener("load", function () {
                 var n = j;
                 for (; m < k + 5 && k + 5 <= chessWidth; m++, n++) {
                     // 如果是玩家落得子
-                    if (chessPlace[m][n] == 1) {
+                    if (chessPlace[m][n] === 1) {
                         playerNum++;
-                    } else if (chessPlace[m][n] == 2) { //如果是电脑落子
+                    } else if (chessPlace[m][n] === 2) { //如果是电脑落子
                         computerNum++;
                     }
                 }
                 // 注意在斜向判断时，可能出现构不成五元组（靠近棋盘的四个顶角）的情况，所以要忽略这种情况
-                if (m == k + 5) {
+                if (m === k + 5) {
                     // 将每一个五元组中的黑棋和白棋个数传入评分表中
                     tempScore = chessScore(playerNum, computerNum);
                     // 为该五元组的每个位置添加分数
                     for (m = k, n = j; m < k + 5; m++, n++) {
-                        score[m][n] += tempScore;
+                        scoreGroup[m][n] += tempScore;
                     }
                 }
                 // 清空五元组中棋子数量和五元组临时得分
@@ -683,19 +690,19 @@ window.addEventListener("load", function () {
                 var n = j;
                 for (; m < k + 5 && k + 5 <= chessWidth; m++, n++) {
                     // 如果是玩家落得子
-                    if (chessPlace[n][m] == 1) {
+                    if (chessPlace[n][m] === 1) {
                         playerNum++;
-                    } else if (chessPlace[n][m] == 2) { //如果是电脑落子
+                    } else if (chessPlace[n][m] === 2) { //如果是电脑落子
                         computerNum++;
                     }
                 }
                 // 注意在斜向判断时，可能出现构不成五元组（靠近棋盘的四个顶角）的情况，所以要忽略这种情况
-                if (m == k + 5) {
+                if (m === k + 5) {
                     // 将每一个五元组中的黑棋和白棋个数传入评分表中
                     tempScore = chessScore(playerNum, computerNum);
                     // 为该五元组的每个位置添加分数
                     for (m = k, n = j; m < k + 5; m++, n++) {
-                        score[n][m] += tempScore;
+                        scoreGroup[n][m] += tempScore;
                     }
                 }
                 // 清空五元组中棋子数量和五元组临时得分
@@ -708,57 +715,57 @@ window.addEventListener("load", function () {
         // 从空位置中找到得分最大的位置
         for (var i = 0; i < chessWidth; i++) {
             for (var j = 0; j < chessWidth; j++) {
-                if (chessPlace[i][j] == 0 && score[i][j] > maxScore) {
+                if (chessPlace[i][j] === 0 && scoreGroup[i][j] > maxScore) {
                     goalX = i;
                     goalY = j;
-                    maxScore = score[i][j];
+                    maxScore = scoreGroup[i][j];
                 }
             }
         }
-        if (goalX != -1 && goalY != -1 && chessPlace[goalX][goalY] == 0) {
+        if (goalX != -1 && goalY != -1 && chessPlace[goalX][goalY] === 0) {
             // 落子
             drawChess(goalX, goalY, false);
             // 保存游戏数据
-            computerData();
+            handleComputerData();
             // 保存该位置的落子
             chessPlace[goalX][goalY] = 2;
             // 判断输赢
             if (win(goalX, goalY, num = 2)) {
                 // 游戏结束
-                gameOver = true;
+                isGameOver = true;
                 // 保存游戏数据
-                computerData(true);
+                handleComputerData(true);
                 // 下一轮玩家落子
-                isMan = true;
+                isPlayer = true;
                 var choice = confirm("你输了，再来一局？");
                 // 播放失败音效
                 failMp3.play();
                 if (choice) {
                     // 清空棋盘
-                    clear();
+                    clearBoard();
                     // 清空落子步数和分数
-                    playerData("", "clearPath");
-                    computerData("", "clearPath");
-                    gameOver = false;
+                    handlePlayerData(false, "again");
+                    handleComputerData(false, "again");
+                    isGameOver = false;
                 }
             } else if (tie()) {
                 // 游戏结束
-                gameOver = true;
+                isGameOver = true;
                 // 下一局轮到玩家下棋
-                isMan = true;
+                isPlayer = true;
                 // 是否再来一局
                 var choice = confirm("占成平局，再来一局？");
                 if (choice) {
                     // 清空棋盘
-                    clear();
+                    clearBoard();
                     // 清空落子步数和分数
-                    playerData("", "clearPath");
-                    computerData("", "clearPath");
-                    gameOver = false;
+                    handlePlayerData(false, "again");
+                    handleComputerData(false, "again");
+                    isGameOver = false;
                 }
             } else {
                 // 轮到玩家下棋
-                isMan = true;
+                isPlayer = true;
             }
         }
 

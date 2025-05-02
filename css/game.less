@@ -6,8 +6,7 @@ body {
 }
 
 // 界面是否显示
-.displays {
-    // 隐藏
+.hidden {
     display: none;
 }
 
@@ -29,7 +28,7 @@ body {
 }
 
 // 设置游戏外部容器
-.wrapper {
+.game-container {
     width: 1000px;
     height: 600px;
     margin: 5% auto;
@@ -42,11 +41,11 @@ body {
     }
 
     // 设置游戏内菜单
-    .chessMenu {
+    .chess-menu {
         width: 200px;
-        float: left;
         margin-top: 20%;
         flex-flow: column wrap;
+        float: left;
 
         // background-color:skyblue;
         button {
@@ -61,7 +60,7 @@ body {
     }
 
     //设置游戏数据区域 
-    .gameData {
+    .game-data {
         width: 200px;
         height: 560px;
         float: left;

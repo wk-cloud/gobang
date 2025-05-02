@@ -1,0 +1,41 @@
+@media (max-width: 1020px) {
+  body {
+    overflow: auto;
+  }
+  .game-container {
+    width: 60%;
+    background-color: orange;
+    margin: 0 auto;
+  }
+  .game-container .chess {
+    margin: 0 auto;
+  }
+  .game-container .game-data,
+  .game-container .chess-menu {
+    width: 100%;
+    float: none;
+  }
+  .game-container .chess-menu {
+    display: flex;
+    flex-flow: row wrap;
+    background: Red;
+  }
+  .game-container .chess-menu button {
+    display: block;
+  }
+  .game-container .game-data ul {
+    width: 100%;
+    height: fit-content;
+    padding-bottom: 2rem;
+    background: url(../img/menuIcon/menu03.jfif);
+    display: flex;
+  }
+  .game-container .game-data ul li {
+    width: 50%;
+    flex-grow: 1;
+  }
+  .game-container .game-data .machine,
+  .game-container .game-data .player {
+    background: none;
+  }
+}

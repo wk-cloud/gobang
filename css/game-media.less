@@ -1,0 +1,48 @@
+@media (max-width : 1020px) {
+	body {
+		overflow: auto;
+	}
+
+	.game-container {
+		width: 60%;
+		background-color: orange;
+		margin: 0 auto;
+
+		.chess{
+			margin: 0 auto;
+		}
+
+		.game-data,
+		.chess-menu {
+			width: 100%;
+			float: none;
+		}
+
+		.chess-menu {
+			display: flex;
+			flex-flow: row wrap;
+			background:Red;
+			button {
+				display: block;
+			}
+		}
+
+		.game-data {
+			ul {
+				width: 100%;
+				height: fit-content;
+				padding-bottom: 2rem;
+				background: url(../img/menuIcon/menu03.jfif);
+				display: flex;
+				li {
+					width: 50%;
+					flex-grow: 1;
+				}
+			}
+
+			.machine,.player{
+				background:none;
+			}
+		}
+	}
+}
